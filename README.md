@@ -1,2 +1,1 @@
-# Zoo Database
- 
+Zoo Database Project created for COSC 3380 - Databases

@@ -1,0 +1,69 @@
+Zoo DB Triggers
+
+Most triggers add to the 'notifications' table which is meant to be reviewed by a host to send out emails. Unsent messages from the notifications table are marked by the 'Sent' value (0 -> No, 1 -> Yes)
+Notifications table contains a unique identification numbers (int), if it was sent (boolean), the name (string), type of email (string), and the timestamp of when it was last updated and or added (timestamp). The only other time a item in the notifications table should be updated is when it is sent.
+
+
+
+ticket AFTER INSERT
+-- Whenever a new ticket is created, add a 'Reciept' to the notifications table.
+
+# Select Zoo DB
+use zoo;
+# Create a ticket booth if needed
+#INSERT INTO `ticket booth` (BoothID) VALUES (1);
+Select * FROM `ticket booth`;
+# Create a new member if needed
+#INSERT INTO member (Email, FName, MInitial, LName, StartDate) VALUES ("testing@gmail.com", "Bob", "K", "Ross", 04/15/2021);
+Select * FROM member;
+# Create a new ticket
+INSERT INTO ticket (TicketID, Price, Date, `Ticket Booth_BoothID`, Member_Email) VALUES (12350, 20.0, '2021-04-20', 1, "testing@gmail.com");
+Select * FROM ticket;
+# View notifications (Reciept)
+Select * FROM notifications;
+
+
+
+itemtype AFTER UPDATE
+-- Whenever a item stock amount is updated and is low, add a 'Low Stock Notice' in the notifications table.
+
+# Select Zoo DB
+use zoo;
+# Create a new giftshop if needed
+#INSERT INTO giftshop (ShopID) VALUES (12);
+SELECT * FROM giftshop;
+# Create a new itemtype if needed
+#INSERT INTO itemtype (ID, InStock, Name, GiftShop_ShopID) VALUES (1352, 13, "Teddy Bear", 12);
+SELECT * FROM itemtype;
+# Update the itemtype's stock by ID number
+UPDATE itemtype SET InStock = 4 WHERE ID = 10;
+# View notifications (Low Stock Notice)
+SELECT * FROM notifications;
+
+
+
+employee BEFORE UPDATE
+-- If someone attempts to change an employee ID a error will be thrown and the update will not continue.
+
+# Select Zoo DB
+use zoo;
+# Create a new employee if needed
+#INSERT INTO employee (FName, LName, ID, Role) VALUES ('Johhny', 'Appleseed', 1534, 'Manager');
+# Update employee id
+UPDATE employee SET ID = 1352 WHERE ID = 1354;
+# A error message should pop up in the output section of mysql workbench
+# Error Code: 1644. You cannot change a employee ID
+
+
+
+employee AFTER UPDATE
+-- Whenever an Employee's role changes, add a 'Role Change' in the notifications table.
+
+# Select Zoo DB
+use zoo;
+# Create a new employee if needed
+#INSERT INTO employee (FName, LName, ID, Role) VALUES ('Johhny', 'Appleseed', 1534, 'Manager');
+# Update employee role
+UPDATE employee SET Role = 'Employee' WHERE ID = 1354;
+# View notifications (Role Change)
+SELECT * FROM notifications;
